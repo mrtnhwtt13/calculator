@@ -1,23 +1,46 @@
 #!/usr/bin/env python3
 #----------------------------------------------------------------------
-def add(x, y):
-    """"""
-    return x + y
+def add(nbrs):
+    result = 0
+    for nb in nbrs:
+        if "." in nb:
+            result += float(nb)
+        else:
+            result += int(nb) 
+    return result
 
 #----------------------------------------------------------------------
-def division(x, y):
-    """"""
-    if y == 0:
-        raise Exception("can't divide by 0")
+def division(nbrs):
+    if 0 in nbrs:
+        return("ERROR")
     else:
-        return x / y
+        first = 0
+        result = 0
+        for nb in nbrs:
+            if first == 0:
+                result += nb
+                first = 1
+            else:
+                result /= nb
+    return result
+
+        
 
 #----------------------------------------------------------------------
-def multiply(x, y):
-    """"""
-    return x * y
+def multiply(nbrs):
+    result = 1
+    for nb in nbrs:
+        result *= nb
+    return result
 
 #----------------------------------------------------------------------
-def subtract(x, y):
-    """"""
-    return x - y
+def subtract(nbrs):
+    result = 0
+    first = 0
+    for nb in nbrs:
+        if first == 0:
+            result += nb
+            first = 1
+        else:
+            result -= nb
+    return result
