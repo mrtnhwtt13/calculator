@@ -18,10 +18,16 @@ def division(nbrs):
         result = 0
         for nb in nbrs:
             if first == 0:
-                result += nb
+                if "." in nb:
+                    result += float(nb)
+                else :
+                    result += int(nb)
                 first = 1
             else:
-                result /= nb
+                if "." in nb:
+                    result /= float(nb)
+                else:
+                    result /= int(nb)
     return result
 
         
@@ -30,7 +36,10 @@ def division(nbrs):
 def multiply(nbrs):
     result = 1
     for nb in nbrs:
-        result *= nb
+        if "." in nb:
+            result *= float(nb)
+        else:
+            result *= int(nb)
     return result
 
 #----------------------------------------------------------------------
@@ -39,8 +48,14 @@ def subtract(nbrs):
     first = 0
     for nb in nbrs:
         if first == 0:
-            result += nb
+            if "." in nb:
+                result += float(nb)
+            else:
+                result += int(nb)
             first = 1
         else:
-            result -= nb
+            if "." in nb:
+                result -= float(nb)
+            else:
+                result -= int(nb)
     return result

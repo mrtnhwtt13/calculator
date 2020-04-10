@@ -26,8 +26,7 @@ def equal(*input):
     if "/" in calc_input:
         nbrs = calc_input.split("/")
         result = my_arithmetic.division(nbrs)
-    else:
-        result = calc_input
+    
     calc_input = ""
     calc_input_text.set(calc_input)
     result_text.set(result)
