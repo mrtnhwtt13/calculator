@@ -12,11 +12,13 @@ def input_key(value):
     print(calc_input)
 
 def equal():
+    #should separate the string in piece to calculate
     global calc_input
-    additions = calc_input.split("+")
-    result = 0
-    for value in additions:
-        result += int(value)
+    # additions = calc_input.split("+")
+    # result = 0
+    # for value in additions:
+    #     result += int(value)
+    result = eval(calc_input)
     calc_input = ""
     calc_input_text.set(calc_input)
     result_text.set(result)
