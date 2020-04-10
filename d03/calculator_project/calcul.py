@@ -11,14 +11,29 @@ def input_key(value):
     calc_input_text.set(calc_input)
     print(calc_input)
 
-def equal():
-    #should separate the string in piece to calculate
+def equal(*input):
     global calc_input
-    # additions = calc_input.split("+")
-    # result = 0
-    # for value in additions:
-    #     result += int(value)
-    result = eval(calc_input)
+    result = 0
+    if "+" in calc_input:
+        additions = calc_input.split("+")
+        nb1 = int(additions[0])
+        nb2 = int(additions[1])
+        result = my_arithmetic.add(nb1, nb2)
+    if "-" in calc_input:
+        additions = calc_input.split("-")
+        nb1 = int(additions[0])
+        nb2 = int(additions[1])
+        result = my_arithmetic.subtract(nb1, nb2)
+    if "*" in calc_input:
+        additions = calc_input.split("*")
+        nb1 = int(additions[0])
+        nb2 = int(additions[1])
+        result = my_arithmetic.multiply(nb1, nb2)
+    if "/" in calc_input:
+        additions = calc_input.split("/")
+        nb1 = int(additions[0])
+        nb2 = int(additions[1])
+        result = my_arithmetic.division(nb1, nb2)
     calc_input = ""
     calc_input_text.set(calc_input)
     result_text.set(result)
