@@ -12,15 +12,22 @@ def input_key(value):
     calc_input_text.set(calc_input)
     print(calc_input)
 
+
+def merger(to_merge, formated, pos):
+    print("merging", formated, "with", to_merge,"on position", pos-1)
+    formated.pop(pos+1)
+    formated.pop(pos)
+    formated[pos-1] = to_merge
+    return formated
+
+
 def get_multiply(formated, pos_multi):
     nbrs = [formated[pos_multi-1], formated[pos_multi+1]]
     print("numbers to multiply :",nbrs)
-    del formated[pos_multi-1:pos_multi+2]
-    print("trimmed the original list in multiply :",formated)
     op = my_arithmetic.multiply(nbrs)
-    to_merge = [str(op)]
+    to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = to_merge+formated
+    merged = merger(to_merge, formated, pos_multi)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
@@ -28,12 +35,30 @@ def get_multiply(formated, pos_multi):
 def get_division(formated, pos_div):
     nbrs = [formated[pos_div-1], formated[pos_div+1]]
     print("numbers to divide :",nbrs)
-    del formated[pos_div-1:pos_div+2]
-    print("trimmed the original list in divide :",formated)
     op = my_arithmetic.division(nbrs)
-    to_merge = [str(op)]
+    to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = to_merge+formated
+    merged = merger(to_merge, formated, pos_div)
+    print("concatenated the two list, here it is before sending it back to priority", merged)
+    return merged
+
+def get_addition(formated, pos_add):
+    nbrs = [formated[pos_add-1], formated[pos_add+1]]
+    print("numbers to add :",nbrs)
+    op = my_arithmetic.add(nbrs)
+    to_merge = str(op)
+    print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    merged = merger(to_merge, formated, pos_add)
+    print("concatenated the two list, here it is before sending it back to priority", merged)
+    return merged
+
+def get_substraction(formated, pos_sub):
+    nbrs = [formated[pos_sub-1], formated[pos_sub+1]]
+    print("numbers to substract :",nbrs)
+    op = my_arithmetic.substract(nbrs)
+    to_merge = str(op)
+    print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    merged = merger(to_merge, formated, pos_sub)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
@@ -65,7 +90,31 @@ def priority(formated):
         merged = get_division(formated, pos_div)
         print("in fourth if of priority, did a division, result is :",merged)
         formated = priority(merged)
-
+    if "*" in formated and "/" in formated:
+        pos_add = formated.index("+")
+        pos_sub = formated.index("-")
+        if pos_sub > pos_add: # addition is first
+            print("going to add this", formated,"with the element on position", pos_add)
+            merged = get_addition(formated, pos_add)
+            print("in second if of priority, did a addition, result is :",merged)
+            formated = priority(merged)    
+        else: #substraction is first
+            print("going to substract this", formated,"with the element on position", pos_sub)
+            merged = get_substraction(formated, pos_sub)
+            print("in first else of priority, did a substraction, result is :",merged)
+            formated = priority(merged)
+    if "+" in formated:
+        pos_add = formated.index("+")
+        print("going to add this", formated,"with the element on position", pos_add)
+        merged = get_addition(formated, pos_add)
+        print("in second if of priority, did a addition, result is :",merged)
+        formated = priority(merged) 
+    if "-" in formated:
+        pos_sub = formated.index("-")
+        print("going to substract this", formated,"with the element on position", pos_sub)
+        merged = get_substraction(formated, pos_sub)
+        print("in first else of priority, did a substraction, result is :",merged)
+        formated = priority(merged)
     result = formated   
     return result
 
@@ -82,23 +131,7 @@ def equal(*input):
     global calc_input
     result = 0
 
-    result = formater(calc_input)
-
-    # if "+" in calc_input:
-    #     nbrs = calc_input.split("+")
-    #     result = my_arithmetic.add(nbrs)
-    # if "-" in calc_input:
-    #     nbrs = calc_input.split("-")
-    #     result = my_arithmetic.subtract(nbrs)
-    # if "*" in calc_input:
-    #     nbrs = calc_input.split("*")
-    #     result = my_arithmetic.multiply(nbrs)
-    # if "/" in calc_input:
-    #     nbrs = calc_input.split("/")
-    #     result = my_arithmetic.division(nbrs)
-    
-    #nbrs = 0
-    
+    result = formater(calc_input)    
     calc_input = ""
     calc_input_text.set(calc_input)
     result_text.set(result)
