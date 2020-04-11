@@ -12,6 +12,11 @@ def input_key(value):
     calc_input_text.set(calc_input)
     print(calc_input)
 
+def clear():
+    global calc_input
+    calc_input = ""
+    calc_input_text.set(calc_input)
+    print(calc_input)
 
 def merger(to_merge, formated, pos):
     print("merging", formated, "with", to_merge,"on position", pos-1)
@@ -60,7 +65,7 @@ def get_addition(formated, pos):
 def get_substraction(formated, pos):
     nbrs = [formated[pos-1], formated[pos+1]]
     print("numbers to substract :",nbrs)
-    op = my_arithmetic.substract(nbrs)
+    op = my_arithmetic.subtract(nbrs)
     to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
     merged = merger(to_merge, formated, pos)
@@ -135,12 +140,32 @@ def priority(formated):
     result = formated   
     return result
 
+def check_for_neg_nbr(formated):
+    print("in check_for_neg_nbr received", formated)
+    if "-" not in formated:
+        return formated
+    if formated[0] == "-":
+        formated.pop(0)
+        formated[0]= "-"+formated[0]
+    pos = formated.index("-")
+    if formated[pos+1] == "-":
+        formated[pos+1] = formated[pos+1]+formated[pos+2]
+        formated.pop(pos+2)
+        formated = check_for_neg_nbr(formated)
+    check_against = ["(","+", "*", "/"]
+    if formated[pos-1] in check_against:
+        formated.pop(pos)
+        formated[pos] ="-"+formated[pos]
+        formated = check_for_neg_nbr(formated)
+    return formated
 
 def formater(to_format):
     formated = re.split('(\W)', to_format)
     print("input formated ->",formated)
     formated[:] = [x for x in formated if x != ""]
     print("input formated and got rid of empty elements ->",formated)
+    if "-" in formated:
+        formated = check_for_neg_nbr(formated)
     if len(formated)%2 == 0:
         result = "ERROR"
     elif "(" in formated and ")" not in formated:
@@ -150,9 +175,6 @@ def formater(to_format):
     else:
         result = priority(formated)
     return result
-
-
-        
 
 def equal(*input):
     global calc_input
@@ -166,30 +188,64 @@ def equal(*input):
     result_text.set(result)
     print(result)
 
+btn_params = {
+    'padx': 16,
+    'pady': 1,
+    'bd': 4,
+    'fg': 'white',
+    'bg': '#666666',
+    'font': ('arial', 18),
+    'width': 2,
+    'height': 2,
+    'relief': 'flat',
+    'activebackground': "#666666"
+}
+display_params = {
+    'font' : ('arial', 36),
+    'relief' :'flat',
+    'bg' : '#666666', 
+    'fg' : 'white', 
+    'width' : 10, 
+    'bd' : 4, 
+    'justify' : 'right'
+}
+equal_params = {
+    'padx': 16,
+    'pady': 1,
+    'bd': 5,
+    'fg': 'white',
+    'bg': '#9e5644',
+    'font': ('arial', 18),
+    'width': 7,
+    'height': 2,
+    'relief': 'flat',
+    'activebackground': "#ff9980"
+}
 
 
-
-Button(window, text=" 0 ", command=lambda: input_key("0")).grid(row=6, column=0)
-Button(window, text=" 1 ", command=lambda: input_key("1")).grid(row=5, column=0)
-Button(window, text=" 2 ", command=lambda: input_key("2")).grid(row=5, column=1)
-Button(window, text=" 3 ", command=lambda: input_key("3")).grid(row=5, column=2)
-Button(window, text=" 4 ", command=lambda: input_key("4")).grid(row=4, column=0)
-Button(window, text=" 5 ", command=lambda: input_key("5")).grid(row=4, column=1)
-Button(window, text=" 6 ", command=lambda: input_key("6")).grid(row=4, column=2)
-Button(window, text=" 7 ", command=lambda: input_key("7")).grid(row=3, column=0)
-Button(window, text=" 8 ", command=lambda: input_key("8")).grid(row=3, column=1)
-Button(window, text=" 9 ", command=lambda: input_key("9")).grid(row=3, column=2)
-Button(window, text=" + ", command=lambda: input_key("+")).grid(row=5, column=3)
-Button(window, text=" - ", command=lambda: input_key("-")).grid(row=6, column=3)
-Button(window, text=" * ", command=lambda: input_key("*")).grid(row=4, column=3)
-Button(window, text=" / ", command=lambda: input_key("/")).grid(row=3, column=3)
-Button(window, text=" . ", command=lambda: input_key(".")).grid(row=6, column=1)
-Button(window, text=" = ", command=lambda: equal()).grid(row=6, column=2)
-Button(window, text=" ( ", command=lambda: input_key("(")).grid(row=7, column=0)
-Button(window, text=" ) ", command=lambda: input_key(")")).grid(row=7, column=1)
+Button(window, **btn_params, text=" 0 ", command=lambda: input_key("0")).grid(row=7, column=0)
+Button(window, **btn_params, text=" 1 ", command=lambda: input_key("1")).grid(row=6, column=0)
+Button(window, **btn_params, text=" 2 ", command=lambda: input_key("2")).grid(row=6, column=1)
+Button(window, **btn_params, text=" 3 ", command=lambda: input_key("3")).grid(row=6, column=2)
+Button(window, **btn_params, text=" 4 ", command=lambda: input_key("4")).grid(row=5, column=0)
+Button(window, **btn_params, text=" 5 ", command=lambda: input_key("5")).grid(row=5, column=1)
+Button(window, **btn_params, text=" 6 ", command=lambda: input_key("6")).grid(row=5, column=2)
+Button(window, **btn_params, text=" 7 ", command=lambda: input_key("7")).grid(row=4, column=0)
+Button(window, **btn_params, text=" 8 ", command=lambda: input_key("8")).grid(row=4, column=1)
+Button(window, **btn_params, text=" 9 ", command=lambda: input_key("9")).grid(row=4, column=2)
+Button(window, **btn_params, text=" - ", command=lambda: input_key("-")).grid(row=6, column=3)
+Button(window, **btn_params, text=" + ", command=lambda: input_key("+")).grid(row=5, column=3)
+Button(window, **btn_params, text=" * ", command=lambda: input_key("*")).grid(row=4, column=3)
+Button(window, **btn_params, text=" / ", command=lambda: input_key("/")).grid(row=3, column=3)
+Button(window, **btn_params, text=" . ", command=lambda: input_key(".")).grid(row=7, column=1)
+Button(window, **equal_params, text=" = ", command=lambda: equal()).grid(row=7, column=2, columnspan=2)
+Button(window, **btn_params, text=" ( ", command=lambda: input_key("(")).grid(row=3, column=0)
+Button(window, **btn_params, text=" ) ", command=lambda: input_key(")")).grid(row=3, column=1)
+Button(window, **btn_params, text=" C ", command=lambda: clear()).grid(row=3, column=2)
 
 calc_input_text = StringVar()
-Label(window, textvariable=calc_input_text).grid(row=1, column=0)
+Label(window, **display_params, textvariable=calc_input_text).grid(row=1, columnspan=4)
 result_text = StringVar()
-Label(window, textvariable=result_text).grid(row=2, column=0)
+Label(window, **display_params, textvariable=result_text).grid(row=2, columnspan=4)
+window.resizable(False, False)
 window.mainloop()
