@@ -20,51 +20,68 @@ def merger(to_merge, formated, pos):
     formated[pos-1] = to_merge
     return formated
 
+def paranthese_merger(para_result, formated, start, end):
+    while end > start:
+        formated.pop(end)
+        end-=1
+    formated[start] = para_result[0]
+    return formated
 
-def get_multiply(formated, pos_multi):
-    nbrs = [formated[pos_multi-1], formated[pos_multi+1]]
+def get_multiply(formated, pos):
+    nbrs = [formated[pos-1], formated[pos+1]]
     print("numbers to multiply :",nbrs)
     op = my_arithmetic.multiply(nbrs)
     to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = merger(to_merge, formated, pos_multi)
+    merged = merger(to_merge, formated, pos)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
-
-def get_division(formated, pos_div):
-    nbrs = [formated[pos_div-1], formated[pos_div+1]]
+def get_division(formated, pos):
+    nbrs = [formated[pos-1], formated[pos+1]]
     print("numbers to divide :",nbrs)
     op = my_arithmetic.division(nbrs)
     to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = merger(to_merge, formated, pos_div)
+    merged = merger(to_merge, formated, pos)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
-def get_addition(formated, pos_add):
-    nbrs = [formated[pos_add-1], formated[pos_add+1]]
+def get_addition(formated, pos):
+    nbrs = [formated[pos-1], formated[pos+1]]
     print("numbers to add :",nbrs)
     op = my_arithmetic.add(nbrs)
     to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = merger(to_merge, formated, pos_add)
+    merged = merger(to_merge, formated, pos)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
-def get_substraction(formated, pos_sub):
-    nbrs = [formated[pos_sub-1], formated[pos_sub+1]]
+def get_substraction(formated, pos):
+    nbrs = [formated[pos-1], formated[pos+1]]
     print("numbers to substract :",nbrs)
     op = my_arithmetic.substract(nbrs)
     to_merge = str(op)
     print("result added to a list to be concatenated to trimmed original list :", to_merge)
-    merged = merger(to_merge, formated, pos_sub)
+    merged = merger(to_merge, formated, pos)
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
+def listRightIndex(alist, value):
+    return len(alist) - alist[-1::-1].index(value) -1
+
 def priority(formated):
-    #------checks if there is a multiplication and division and then checks which one to do first
     print("priority received this list :", formated)
+    if "(" in formated and ")" in formated:
+        start = formated.index("(")
+        print("start at", formated[start], "index is", start)
+        end = listRightIndex(formated, ")")
+        print("end at", formated[end], "index is", end)
+        print("getting this list from the paranthese",formated[start+1:end])
+        in_para = formated[start+1:end]
+        para_result = priority(in_para)
+        formated = paranthese_merger(para_result, formated, start, end)
+        print("after paranthese_merger formated looks like", formated)
     if "*" in formated and "/" in formated:
         pos_multi = formated.index("*")
         pos_div = formated.index("/")
@@ -118,10 +135,20 @@ def priority(formated):
     result = formated   
     return result
 
+
 def formater(to_format):
     formated = re.split('(\W)', to_format)
     print("input formated ->",formated)
-    result = priority(formated)
+    formated[:] = [x for x in formated if x != ""]
+    print("input formated and got rid of empty elements ->",formated)
+    if len(formated)%2 == 0:
+        result = "ERROR"
+    elif "(" in formated and ")" not in formated:
+        result = "ERROR"
+    elif ")" in formated and "(" not in formated:
+        result = "ERROR"
+    else:
+        result = priority(formated)
     return result
 
 
@@ -131,7 +158,9 @@ def equal(*input):
     global calc_input
     result = 0
 
-    result = formater(calc_input)    
+    result = formater(calc_input)
+    if isinstance(result, list):
+        result[:] = [x for x in result if x != "(" and x != ")"]  
     calc_input = ""
     calc_input_text.set(calc_input)
     result_text.set(result)
@@ -156,6 +185,8 @@ Button(window, text=" * ", command=lambda: input_key("*")).grid(row=4, column=3)
 Button(window, text=" / ", command=lambda: input_key("/")).grid(row=3, column=3)
 Button(window, text=" . ", command=lambda: input_key(".")).grid(row=6, column=1)
 Button(window, text=" = ", command=lambda: equal()).grid(row=6, column=2)
+Button(window, text=" ( ", command=lambda: input_key("(")).grid(row=7, column=0)
+Button(window, text=" ) ", command=lambda: input_key(")")).grid(row=7, column=1)
 
 calc_input_text = StringVar()
 Label(window, textvariable=calc_input_text).grid(row=1, column=0)
