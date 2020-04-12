@@ -73,21 +73,35 @@ def get_substraction(formated, pos):
     print("concatenated the two list, here it is before sending it back to priority", merged)
     return merged
 
-def listRightIndex(alist, value):
-    return len(alist) - alist[-1::-1].index(value) -1
+def get_paranthese_end(formated, pos):
+    paranthese = 1
+    i = 1
+    print("in get_parenthese_end, going to check this list", formated, "parenthese is starting at", pos, "i is at", i, "paranthese value is", paranthese)
+    while paranthese != 0:
+        print("checking", formated[pos+i])
+        if formated[pos+i] == "(":
+            print("found an opening ( on index", pos+i)
+            paranthese += 1
+        if formated[pos+i] == ")":
+            print("found a closing ) on index", pos+i)
+            paranthese -= 1
+        i +=1
+        print("i is at", i,"checked index", pos+i)
+    pos_of_close = (pos+i)-1
+    return pos_of_close
+
 
 def get_squareroot(formated):
     if "√" in formated:
         pos = formated.index("√")
         i = 2
-        while formated[pos+i] != ")":
-            i += 1
-        in_squareroot = formated[pos+2:pos+i]
+        end = get_paranthese_end(formated, pos+1)
+        in_squareroot = formated[pos+2:end]
         print("in the squareroot",in_squareroot)
         squareroot_result = priority(in_squareroot)
         squareroot_result = [str(math.sqrt(int(squareroot_result[0])))]
         print(squareroot_result)
-        formated = paranthese_merger(squareroot_result, formated, pos, pos+i)
+        formated = paranthese_merger(squareroot_result, formated, pos, end)
         print("squareroot after paranthese_merger formated looks like", formated)
         formated = priority(formated)
         if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
@@ -99,14 +113,13 @@ def get_squareroot(formated):
 def get_sin(formated):
     pos = formated.index("sin")
     i = 2
-    while formated[pos+i] != ")":
-        i += 1
-    in_sin = formated[pos+2:pos+i]
+    end = get_paranthese_end(formated, pos+1)
+    in_sin = formated[pos+2:end]
     print("in the sin",in_sin)
     sin_result = priority(in_sin)
     sin_result = [str(math.sin(int(sin_result[0])))]
     print(sin_result)
-    formated = paranthese_merger(sin_result, formated, pos, pos+i)
+    formated = paranthese_merger(sin_result, formated, pos, end)
     print("sin after paranthese_merger formated looks like", formated)
     formated = priority(formated)
     if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
@@ -118,14 +131,13 @@ def get_sin(formated):
 def get_cos(formated):
     pos = formated.index("cos")
     i = 2
-    while formated[pos+i] != ")":
-        i += 1
-    in_cos = formated[pos+2:pos+i]
+    end = get_paranthese_end(formated, pos+1)
+    in_cos = formated[pos+2:end]
     print("in the cos",in_cos)
     cos_result = priority(in_cos)
     cos_result = [str(math.cos(int(cos_result[0])))]
     print(cos_result)
-    formated = paranthese_merger(cos_result, formated, pos, pos+i)
+    formated = paranthese_merger(cos_result, formated, pos, end)
     print("cos after paranthese_merger formated looks like", formated)
     formated = priority(formated)
     if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
@@ -137,14 +149,13 @@ def get_cos(formated):
 def get_tan(formated):
     pos = formated.index("tan")
     i = 2
-    while formated[pos+i] != ")":
-        i += 1
-    in_tan = formated[pos+2:pos+i]
+    end = get_paranthese_end(formated, pos+1)
+    in_tan = formated[pos+2:end]
     print("in the tan",in_tan)
     tan_result = priority(in_tan)
     tan_result = [str(math.tan(int(tan_result[0])))]
     print(tan_result)
-    formated = paranthese_merger(tan_result, formated, pos, pos+i)
+    formated = paranthese_merger(tan_result, formated, pos, end)
     print("tan after paranthese_merger formated looks like", formated)
     formated = priority(formated)
     if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
@@ -156,14 +167,13 @@ def get_tan(formated):
 def get_exp(formated):
     pos = formated.index("exp")
     i = 2
-    while formated[pos+i] != ")":
-        i += 1
-    in_exp = formated[pos+2:pos+i]
+    end = get_paranthese_end(formated, pos+1)
+    in_exp = formated[pos+2:end]
     print("in the exp",in_exp)
     exp_result = priority(in_exp)
     exp_result = [str(math.exp(int(exp_result[0])))]
     print(exp_result)
-    formated = paranthese_merger(exp_result, formated, pos, pos+i)
+    formated = paranthese_merger(exp_result, formated, pos, end)
     print("exp after paranthese_merger formated looks like", formated)
     formated = priority(formated)
     if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "exp" not in formated and "exp" not in formated:
@@ -171,6 +181,7 @@ def get_exp(formated):
         return result
     else:
         return formated
+
 
 def priority(formated):
     print("priority received this list :", formated)
@@ -187,13 +198,14 @@ def priority(formated):
     if "(" in formated and ")" in formated:
         start = formated.index("(")
         print("start at", formated[start], "index is", start)
-        end = listRightIndex(formated, ")")
+        end = get_paranthese_end(formated, start)
         print("end at", formated[end], "index is", end)
         print("getting this list from the paranthese",formated[start+1:end])
         in_para = formated[start+1:end]
         para_result = priority(in_para)
         formated = paranthese_merger(para_result, formated, start, end)
         print("after paranthese_merger formated looks like", formated)
+        formated = priority(formated)
     if "*" in formated and "/" in formated:
         pos_multi = formated.index("*")
         pos_div = formated.index("/")
@@ -222,12 +234,12 @@ def priority(formated):
     if "*" in formated and "/" in formated:
         pos_add = formated.index("+")
         pos_sub = formated.index("-")
-        if pos_sub > pos_add: # addition is first
+        if pos_sub > pos_add: 
             print("going to add this", formated,"with the element on position", pos_add)
             merged = get_addition(formated, pos_add)
             print("in second if of priority, did a addition, result is :",merged)
             formated = priority(merged)    
-        else: #substraction is first
+        else: 
             print("going to substract this", formated,"with the element on position", pos_sub)
             merged = get_substraction(formated, pos_sub)
             print("in first else of priority, did a substraction, result is :",merged)
@@ -344,33 +356,36 @@ equal_params = {
     'activebackground': "#ff9980"
 }
 
+class Calculator:
+    def __init__(self, master):
+        Button(window, **spc_params, text=u"x\u00B3", command=lambda: input_key("*3")).grid(row=3, column=0)
+        Button(window, **spc_params, text=" ( ", command=lambda: input_key("(")).grid(row=3, column=1)
+        Button(window, **spc_params, text=" ) ", command=lambda: input_key(")")).grid(row=3, column=2)
+        Button(window, **spc_params, text=" AC ", command=lambda: clear()).grid(row=3, column=3)
+        Button(window, **spc_params, text=" / ", command=lambda: input_key("/")).grid(row=3, column=4)
+        Button(window, **spc_params, text=" exp ", command=lambda: input_key("exp(")).grid(row=4, column=0)
+        Button(window, **btn_params, text=" 7 ", command=lambda: input_key("7")).grid(row=4, column=1)
+        Button(window, **btn_params, text=" 8 ", command=lambda: input_key("8")).grid(row=4, column=2)
+        Button(window, **btn_params, text=" 9 ", command=lambda: input_key("9")).grid(row=4, column=3)
+        Button(window, **spc_params, text=" * ", command=lambda: input_key("*")).grid(row=4, column=4)
+        Button(window, **spc_params, text=" sin ", command=lambda: input_key("sin(")).grid(row=5, column=0)
+        Button(window, **btn_params, text=" 4 ", command=lambda: input_key("4")).grid(row=5, column=1)
+        Button(window, **btn_params, text=" 5 ", command=lambda: input_key("5")).grid(row=5, column=2)
+        Button(window, **btn_params, text=" 6 ", command=lambda: input_key("6")).grid(row=5, column=3)
+        Button(window, **spc_params, text=" + ", command=lambda: input_key("+")).grid(row=5, column=4)
+        Button(window, **spc_params, text=" cos ", command=lambda: input_key("cos(")).grid(row=6, column=0)
+        Button(window, **btn_params, text=" 1 ", command=lambda: input_key("1")).grid(row=6, column=1)
+        Button(window, **btn_params, text=" 2 ", command=lambda: input_key("2")).grid(row=6, column=2)
+        Button(window, **btn_params, text=" 3 ", command=lambda: input_key("3")).grid(row=6, column=3)
+        Button(window, **spc_params, text=" - ", command=lambda: input_key("-")).grid(row=6, column=4)
+        Button(window, **spc_params, text=" tan ", command=lambda: input_key("tan(")).grid(row=7, column=0)
+        Button(window, **btn_params, text=" 0 ", command=lambda: input_key("0")).grid(row=7, column=1)
+        Button(window, **btn_params, text=" . ", command=lambda: input_key(".")).grid(row=7, column=2)
+        Button(window, **equal_params, text=" = ", command=lambda: equal()).grid(row=7, column=3)
+        Button(window, **spc_params, text=" √ ", command=lambda: input_key("√(")).grid(row=7, column=4)
 
-Button(window, **spc_params, text=u"x\u00B3", command=lambda: input_key("*3")).grid(row=3, column=0)
-Button(window, **spc_params, text=" ( ", command=lambda: input_key("(")).grid(row=3, column=1)
-Button(window, **spc_params, text=" ) ", command=lambda: input_key(")")).grid(row=3, column=2)
-Button(window, **spc_params, text=" AC ", command=lambda: clear()).grid(row=3, column=3)
-Button(window, **spc_params, text=" / ", command=lambda: input_key("/")).grid(row=3, column=4)
-Button(window, **spc_params, text=" exp ", command=lambda: input_key("exp(")).grid(row=4, column=0)
-Button(window, **btn_params, text=" 7 ", command=lambda: input_key("7")).grid(row=4, column=1)
-Button(window, **btn_params, text=" 8 ", command=lambda: input_key("8")).grid(row=4, column=2)
-Button(window, **btn_params, text=" 9 ", command=lambda: input_key("9")).grid(row=4, column=3)
-Button(window, **spc_params, text=" * ", command=lambda: input_key("*")).grid(row=4, column=4)
-Button(window, **spc_params, text=" sin ", command=lambda: input_key("sin(")).grid(row=5, column=0)
-Button(window, **btn_params, text=" 4 ", command=lambda: input_key("4")).grid(row=5, column=1)
-Button(window, **btn_params, text=" 5 ", command=lambda: input_key("5")).grid(row=5, column=2)
-Button(window, **btn_params, text=" 6 ", command=lambda: input_key("6")).grid(row=5, column=3)
-Button(window, **spc_params, text=" + ", command=lambda: input_key("+")).grid(row=5, column=4)
-Button(window, **spc_params, text=" cos ", command=lambda: input_key("cos(")).grid(row=6, column=0)
-Button(window, **btn_params, text=" 1 ", command=lambda: input_key("1")).grid(row=6, column=1)
-Button(window, **btn_params, text=" 2 ", command=lambda: input_key("2")).grid(row=6, column=2)
-Button(window, **btn_params, text=" 3 ", command=lambda: input_key("3")).grid(row=6, column=3)
-Button(window, **spc_params, text=" - ", command=lambda: input_key("-")).grid(row=6, column=4)
-Button(window, **spc_params, text=" tan ", command=lambda: input_key("tan(")).grid(row=7, column=0)
-Button(window, **btn_params, text=" 0 ", command=lambda: input_key("0")).grid(row=7, column=1)
-Button(window, **btn_params, text=" . ", command=lambda: input_key(".")).grid(row=7, column=2)
-Button(window, **equal_params, text=" = ", command=lambda: equal()).grid(row=7, column=3)
-Button(window, **spc_params, text=" √ ", command=lambda: input_key("√(")).grid(row=7, column=4)
-
+calcul = Calculator(window)
+window.title("Simple Scientific Calculator")
 calc_input_text = StringVar()
 Label(window, **display_params, textvariable=calc_input_text).grid(row=1, columnspan=6)
 result_text = StringVar()
