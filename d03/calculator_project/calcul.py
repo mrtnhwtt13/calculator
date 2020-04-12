@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 from tkinter import *
 import my_arithmetic
 import re
@@ -234,7 +234,6 @@ def priority(formated):
         
         end = get_paranthese_end(formated, start)
         
-        
         in_para = formated[start+1:end]
         para_result = priority(in_para)
         formated = paranthese_merger(para_result, formated, start, end)
@@ -265,7 +264,7 @@ def priority(formated):
         merged = get_division(formated, pos_div)
         
         formated = priority(merged)
-    if "*" in formated and "/" in formated:
+    if "+" in formated and "-" in formated:
         pos_add = formated.index("+")
         pos_sub = formated.index("-")
         if pos_sub > pos_add: 
@@ -337,7 +336,6 @@ def equal():
     global in_memory 
     in_memory = result
     
-
 def convert_binary():
     global in_memory 
     to_convert = int(in_memory[0])
