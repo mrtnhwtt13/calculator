@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 from tkinter import *
 import my_arithmetic
 import re
@@ -12,13 +12,11 @@ def input_key(value):
     global calc_input
     calc_input += value
     calc_input_text.set(calc_input)
-    ##print(calc_input)
 
 def clear():
     global calc_input
     calc_input = ""
     calc_input_text.set(calc_input)
-    ##print(calc_input)
 
 def error_check(formated):
     if "-" in formated:
@@ -34,7 +32,6 @@ def error_check(formated):
     return result
 
 def merger(to_merge, formated, pos):
-    ##print("merging", formated, "with", to_merge,"on position", pos-1)
     formated.pop(pos+1)
     formated.pop(pos)
     formated[pos-1] = to_merge
@@ -49,58 +46,58 @@ def paranthese_merger(para_result, formated, start, end):
 
 def get_multiply(formated, pos):
     nbrs = [formated[pos-1], formated[pos+1]]
-    #print("numbers to multiply :",nbrs)
+    
     op = my_arithmetic.multiply(nbrs)
     to_merge = str(op)
-    #print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    
     merged = merger(to_merge, formated, pos)
-    #print("concatenated the two list, here it is before sending it back to priority", merged)
+    
     return merged
 
 def get_division(formated, pos):
     nbrs = [formated[pos-1], formated[pos+1]]
-    #print("numbers to divide :",nbrs)
+    
     op = my_arithmetic.division(nbrs)
     to_merge = str(op)
-    #print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    
     merged = merger(to_merge, formated, pos)
-    #print("concatenated the two list, here it is before sending it back to priority", merged)
+    
     return merged
 
 def get_addition(formated, pos):
     nbrs = [formated[pos-1], formated[pos+1]]
-    #print("numbers to add :",nbrs)
+    
     op = my_arithmetic.add(nbrs)
     to_merge = str(op)
-    #print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    
     merged = merger(to_merge, formated, pos)
-    #print("concatenated the two list, here it is before sending it back to priority", merged)
+    
     return merged
 
 def get_substraction(formated, pos):
     nbrs = [formated[pos-1], formated[pos+1]]
-    #print("numbers to substract :",nbrs)
+    
     op = my_arithmetic.subtract(nbrs)
     to_merge = str(op)
-    #print("result added to a list to be concatenated to trimmed original list :", to_merge)
+    
     merged = merger(to_merge, formated, pos)
-    #print("concatenated the two list, here it is before sending it back to priority", merged)
+    
     return merged
 
 def get_paranthese_end(formated, pos):
     paranthese = 1
     i = 1
-    #print("in get_parenthese_end, going to check this list", formated, "parenthese is starting at", pos, "i is at", i, "paranthese value is", paranthese)
+    
     while paranthese != 0:
-        #print("checking", formated[pos+i])
+        
         if formated[pos+i] == "(":
-            #print("found an opening ( on index", pos+i)
+            
             paranthese += 1
         if formated[pos+i] == ")":
-            #print("found a closing ) on index", pos+i)
+            
             paranthese -= 1
         i +=1
-        #print("i is at", i,"checked index", pos+i)
+        
     pos_of_close = (pos+i)-1
     return pos_of_close
 
@@ -109,12 +106,12 @@ def get_squareroot(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_squareroot = formated[pos+2:end]
-    #print("in the squareroot",in_squareroot)
+    
     squareroot_result = priority(in_squareroot)
     squareroot_result = [str(math.sqrt(int(squareroot_result[0])))]
-    #print(squareroot_result)
+    
     formated = paranthese_merger(squareroot_result, formated, pos, end)
-    #print("squareroot after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -128,12 +125,12 @@ def get_sin(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_sin = formated[pos+2:end]
-    #print("in the sin",in_sin)
+    
     sin_result = priority(in_sin)
     sin_result = [str(math.sin(int(sin_result[0])))]
-    #print(sin_result)
+    
     formated = paranthese_merger(sin_result, formated, pos, end)
-    #print("sin after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -147,12 +144,12 @@ def get_cos(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_cos = formated[pos+2:end]
-    #print("in the cos",in_cos)
+    
     cos_result = priority(in_cos)
     cos_result = [str(math.cos(int(cos_result[0])))]
-    #print(cos_result)
+    
     formated = paranthese_merger(cos_result, formated, pos, end)
-    #print("cos after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -166,12 +163,12 @@ def get_tan(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_tan = formated[pos+2:end]
-    #print("in the tan",in_tan)
+    
     tan_result = priority(in_tan)
     tan_result = [str(math.tan(int(tan_result[0])))]
-    #print(tan_result)
+    
     formated = paranthese_merger(tan_result, formated, pos, end)
-    #print("tan after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -185,12 +182,12 @@ def get_exp(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_exp = formated[pos+2:end]
-    #print("in the exp",in_exp)
+    
     exp_result = priority(in_exp)
     exp_result = [str(math.exp(int(exp_result[0])))]
-    #print(exp_result)
+    
     formated = paranthese_merger(exp_result, formated, pos, end)
-    #print("exp after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -204,12 +201,12 @@ def get_factorial(formated):
     i = 2
     end = get_paranthese_end(formated, pos+1)
     in_factorial = formated[pos+2:end]
-    #print("in the factorial",in_factorial)
+    
     factorial_result = priority(in_factorial)
     factorial_result = [str(math.factorial(int(factorial_result[0])))]
-    #print(factorial_result)
+    
     formated = paranthese_merger(factorial_result, formated, pos, end)
-    #print("factorial after paranthese_merger formated looks like", formated)
+    
     formated = priority(formated)
     formated = error_check(formated)
     if formated == "ERROR":
@@ -219,7 +216,7 @@ def get_factorial(formated):
     return result
 
 def priority(formated):
-    #print("priority received this list :", formated)
+    
     if "factorial" in formated:
         formated = get_factorial(formated)
     if "√" in formated:
@@ -234,70 +231,70 @@ def priority(formated):
         formated = get_exp(formated)
     if "(" in formated and ")" in formated:
         start = formated.index("(")
-        #print("start at", formated[start], "index is", start)
+        
         end = get_paranthese_end(formated, start)
-        #print("end at", formated[end], "index is", end)
-        #print("getting this list from the paranthese",formated[start+1:end])
+        
+        
         in_para = formated[start+1:end]
         para_result = priority(in_para)
         formated = paranthese_merger(para_result, formated, start, end)
-        #print("after paranthese_merger formated looks like", formated)
+        
         formated = priority(formated)
     if "*" in formated and "/" in formated:
         pos_multi = formated.index("*")
         pos_div = formated.index("/")
         if pos_div > pos_multi: 
-            #print("going to multiply this", formated,"with the element on position", pos_multi)
+            
             merged = get_multiply(formated, pos_multi)
-            #print("in second if of priority, did a multi, result is :",merged)
+            
             formated = priority(merged)    
         else: 
-            #print("going to divide this", formated,"with the element on position", pos_div)
+            
             merged = get_division(formated, pos_div)
-            #print("in first else of priority, did a division, result is :",merged)
+            
             formated = priority(merged)
     if "*" in formated:
         pos_multi = formated.index("*")
-        #print("going to multiply this", formated,"with the element on position", pos_multi)
+        
         merged = get_multiply(formated, pos_multi)
-        #print("in third if of priority, did a multi, result is :",merged)
+        
         formated = priority(merged)
     if "/" in formated:
         pos_div = formated.index("/")
-        #print("going to divide this", formated,"with the element on position", pos_div)
+        
         merged = get_division(formated, pos_div)
-        #print("in fourth if of priority, did a division, result is :",merged)
+        
         formated = priority(merged)
     if "*" in formated and "/" in formated:
         pos_add = formated.index("+")
         pos_sub = formated.index("-")
         if pos_sub > pos_add: 
-            #print("going to add this", formated,"with the element on position", pos_add)
+            
             merged = get_addition(formated, pos_add)
-            #print("in second if of priority, did a addition, result is :",merged)
+            
             formated = priority(merged)    
         else: 
-            #print("going to substract this", formated,"with the element on position", pos_sub)
+            
             merged = get_substraction(formated, pos_sub)
-            #print("in first else of priority, did a substraction, result is :",merged)
+            
             formated = priority(merged)
     if "+" in formated:
         pos_add = formated.index("+")
-        #print("going to add this", formated,"with the element on position", pos_add)
+        
         merged = get_addition(formated, pos_add)
-        #print("in second if of priority, did a addition, result is :",merged)
+        
         formated = priority(merged) 
     if "-" in formated:
         pos_sub = formated.index("-")
-        #print("going to substract this", formated,"with the element on position", pos_sub)
+        
         merged = get_substraction(formated, pos_sub)
-        #print("in first else of priority, did a substraction, result is :",merged)
+        
         formated = priority(merged)
     result = formated   
     return result
 
 def check_for_neg_nbr(formated):
-    #print("in check_for_neg_nbr received", formated)
+    
     if "-" not in formated:
         return formated
     if formated[0] == "-":
@@ -317,9 +314,9 @@ def check_for_neg_nbr(formated):
 
 def formater(to_format):
     formated = re.split('(\W)', to_format)
-    #print("input formated ->",formated)
+    
     formated[:] = [x for x in formated if x != ""]
-    #print("input formated and got rid of empty elements ->",formated)
+    
     formated = error_check(formated)
     if formated == "ERROR":
         return "ERROR"
@@ -339,34 +336,34 @@ def equal():
     result_text.set(result)
     global in_memory 
     in_memory = result
-    #print(result)
+    
 
 def convert_binary():
     global in_memory 
     to_convert = int(in_memory[0])
     converted = bin(to_convert)
-    #print(converted)
+    
     result_text.set(converted)
 
 def convert_octal():
     global in_memory 
     to_convert = int(in_memory[0])
     converted = oct(to_convert)
-    #print(converted)
+    
     result_text.set(converted)
 
 def convert_decimal():
     global in_memory 
     to_convert = int(in_memory[0])
     converted = int(to_convert)
-    #print(converted)
+    
     result_text.set(converted)
 
 def convert_hexadecimal():
     global in_memory 
     to_convert = int(in_memory[0])
     converted = hex(to_convert)
-    #print(converted)
+    
     result_text.set(converted)
 
 btn_params = {
