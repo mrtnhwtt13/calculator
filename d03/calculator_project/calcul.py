@@ -2,6 +2,7 @@
 from tkinter import *
 import my_arithmetic
 import re
+import math
 
 window = Tk()
 calc_input = ""
@@ -75,8 +76,114 @@ def get_substraction(formated, pos):
 def listRightIndex(alist, value):
     return len(alist) - alist[-1::-1].index(value) -1
 
+def get_squareroot(formated):
+    if "√" in formated:
+        pos = formated.index("√")
+        i = 2
+        while formated[pos+i] != ")":
+            i += 1
+        in_squareroot = formated[pos+2:pos+i]
+        print("in the squareroot",in_squareroot)
+        squareroot_result = priority(in_squareroot)
+        squareroot_result = [str(math.sqrt(int(squareroot_result[0])))]
+        print(squareroot_result)
+        formated = paranthese_merger(squareroot_result, formated, pos, pos+i)
+        print("squareroot after paranthese_merger formated looks like", formated)
+        formated = priority(formated)
+        if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
+            result = "ERROR"
+            return result
+        else:
+            return formated
+
+def get_sin(formated):
+    pos = formated.index("sin")
+    i = 2
+    while formated[pos+i] != ")":
+        i += 1
+    in_sin = formated[pos+2:pos+i]
+    print("in the sin",in_sin)
+    sin_result = priority(in_sin)
+    sin_result = [str(math.sin(int(sin_result[0])))]
+    print(sin_result)
+    formated = paranthese_merger(sin_result, formated, pos, pos+i)
+    print("sin after paranthese_merger formated looks like", formated)
+    formated = priority(formated)
+    if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
+        result = "ERROR"
+        return result
+    else:
+        return formated
+
+def get_cos(formated):
+    pos = formated.index("cos")
+    i = 2
+    while formated[pos+i] != ")":
+        i += 1
+    in_cos = formated[pos+2:pos+i]
+    print("in the cos",in_cos)
+    cos_result = priority(in_cos)
+    cos_result = [str(math.cos(int(cos_result[0])))]
+    print(cos_result)
+    formated = paranthese_merger(cos_result, formated, pos, pos+i)
+    print("cos after paranthese_merger formated looks like", formated)
+    formated = priority(formated)
+    if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
+        result = "ERROR"
+        return result
+    else:
+        return formated
+
+def get_tan(formated):
+    pos = formated.index("tan")
+    i = 2
+    while formated[pos+i] != ")":
+        i += 1
+    in_tan = formated[pos+2:pos+i]
+    print("in the tan",in_tan)
+    tan_result = priority(in_tan)
+    tan_result = [str(math.tan(int(tan_result[0])))]
+    print(tan_result)
+    formated = paranthese_merger(tan_result, formated, pos, pos+i)
+    print("tan after paranthese_merger formated looks like", formated)
+    formated = priority(formated)
+    if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
+        result = "ERROR"
+        return result
+    else:
+        return formated
+
+def get_exp(formated):
+    pos = formated.index("exp")
+    i = 2
+    while formated[pos+i] != ")":
+        i += 1
+    in_exp = formated[pos+2:pos+i]
+    print("in the exp",in_exp)
+    exp_result = priority(in_exp)
+    exp_result = [str(math.exp(int(exp_result[0])))]
+    print(exp_result)
+    formated = paranthese_merger(exp_result, formated, pos, pos+i)
+    print("exp after paranthese_merger formated looks like", formated)
+    formated = priority(formated)
+    if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "exp" not in formated and "exp" not in formated:
+        result = "ERROR"
+        return result
+    else:
+        return formated
+
 def priority(formated):
     print("priority received this list :", formated)
+    if "√" in formated:
+        formated = get_squareroot(formated)
+    if "sin" in formated:
+        formated = get_sin(formated)
+    if "cos" in formated:
+        formated = get_cos(formated)
+    if "tan" in formated:
+        formated = get_tan(formated)
+    if "exp" in formated:
+        formated = get_exp(formated)
     if "(" in formated and ")" in formated:
         start = formated.index("(")
         print("start at", formated[start], "index is", start)
@@ -166,7 +273,7 @@ def formater(to_format):
     print("input formated and got rid of empty elements ->",formated)
     if "-" in formated:
         formated = check_for_neg_nbr(formated)
-    if len(formated)%2 == 0:
+    if len(formated)%2 == 0 and "√" not in formated and "sin" not in formated and "cos" not in formated and "tan" not in formated and "exp" not in formated:
         result = "ERROR"
     elif "(" in formated and ")" not in formated:
         result = "ERROR"
@@ -193,59 +300,80 @@ btn_params = {
     'pady': 1,
     'bd': 4,
     'fg': 'white',
-    'bg': '#666666',
+    'bg': '#4d4d4d',
     'font': ('arial', 18),
     'width': 2,
     'height': 2,
     'relief': 'flat',
     'activebackground': "#666666"
 }
+
+spc_params = {
+    'padx': 16,
+    'pady': 1,
+    'bd': 4,
+    'fg': 'white',
+    'bg': '#666666',
+    'font': ('arial', 18),
+    'width': 2,
+    'height': 2,
+    'relief': 'flat',
+    'activebackground': "#4d4d4d"
+}
+
 display_params = {
-    'font' : ('arial', 36),
+    'font' : ('arial', 20),
     'relief' :'flat',
     'bg' : '#666666', 
     'fg' : 'white', 
-    'width' : 10, 
-    'bd' : 4, 
-    'justify' : 'right'
+    'width' : 20, 
+    'bd' : 21, 
+    'justify' : 'right',
+    'wraplength' : 350
 }
 equal_params = {
     'padx': 16,
     'pady': 1,
-    'bd': 5,
+    'bd': 4,
     'fg': 'white',
     'bg': '#9e5644',
     'font': ('arial', 18),
-    'width': 7,
+    'width': 2,
     'height': 2,
     'relief': 'flat',
     'activebackground': "#ff9980"
 }
 
 
-Button(window, **btn_params, text=" 0 ", command=lambda: input_key("0")).grid(row=7, column=0)
-Button(window, **btn_params, text=" 1 ", command=lambda: input_key("1")).grid(row=6, column=0)
-Button(window, **btn_params, text=" 2 ", command=lambda: input_key("2")).grid(row=6, column=1)
-Button(window, **btn_params, text=" 3 ", command=lambda: input_key("3")).grid(row=6, column=2)
-Button(window, **btn_params, text=" 4 ", command=lambda: input_key("4")).grid(row=5, column=0)
-Button(window, **btn_params, text=" 5 ", command=lambda: input_key("5")).grid(row=5, column=1)
-Button(window, **btn_params, text=" 6 ", command=lambda: input_key("6")).grid(row=5, column=2)
-Button(window, **btn_params, text=" 7 ", command=lambda: input_key("7")).grid(row=4, column=0)
-Button(window, **btn_params, text=" 8 ", command=lambda: input_key("8")).grid(row=4, column=1)
-Button(window, **btn_params, text=" 9 ", command=lambda: input_key("9")).grid(row=4, column=2)
-Button(window, **btn_params, text=" - ", command=lambda: input_key("-")).grid(row=6, column=3)
-Button(window, **btn_params, text=" + ", command=lambda: input_key("+")).grid(row=5, column=3)
-Button(window, **btn_params, text=" * ", command=lambda: input_key("*")).grid(row=4, column=3)
-Button(window, **btn_params, text=" / ", command=lambda: input_key("/")).grid(row=3, column=3)
-Button(window, **btn_params, text=" . ", command=lambda: input_key(".")).grid(row=7, column=1)
-Button(window, **equal_params, text=" = ", command=lambda: equal()).grid(row=7, column=2, columnspan=2)
-Button(window, **btn_params, text=" ( ", command=lambda: input_key("(")).grid(row=3, column=0)
-Button(window, **btn_params, text=" ) ", command=lambda: input_key(")")).grid(row=3, column=1)
-Button(window, **btn_params, text=" C ", command=lambda: clear()).grid(row=3, column=2)
+Button(window, **spc_params, text=u"x\u00B3", command=lambda: input_key("*3")).grid(row=3, column=0)
+Button(window, **spc_params, text=" ( ", command=lambda: input_key("(")).grid(row=3, column=1)
+Button(window, **spc_params, text=" ) ", command=lambda: input_key(")")).grid(row=3, column=2)
+Button(window, **spc_params, text=" AC ", command=lambda: clear()).grid(row=3, column=3)
+Button(window, **spc_params, text=" / ", command=lambda: input_key("/")).grid(row=3, column=4)
+Button(window, **spc_params, text=" exp ", command=lambda: input_key("exp(")).grid(row=4, column=0)
+Button(window, **btn_params, text=" 7 ", command=lambda: input_key("7")).grid(row=4, column=1)
+Button(window, **btn_params, text=" 8 ", command=lambda: input_key("8")).grid(row=4, column=2)
+Button(window, **btn_params, text=" 9 ", command=lambda: input_key("9")).grid(row=4, column=3)
+Button(window, **spc_params, text=" * ", command=lambda: input_key("*")).grid(row=4, column=4)
+Button(window, **spc_params, text=" sin ", command=lambda: input_key("sin(")).grid(row=5, column=0)
+Button(window, **btn_params, text=" 4 ", command=lambda: input_key("4")).grid(row=5, column=1)
+Button(window, **btn_params, text=" 5 ", command=lambda: input_key("5")).grid(row=5, column=2)
+Button(window, **btn_params, text=" 6 ", command=lambda: input_key("6")).grid(row=5, column=3)
+Button(window, **spc_params, text=" + ", command=lambda: input_key("+")).grid(row=5, column=4)
+Button(window, **spc_params, text=" cos ", command=lambda: input_key("cos(")).grid(row=6, column=0)
+Button(window, **btn_params, text=" 1 ", command=lambda: input_key("1")).grid(row=6, column=1)
+Button(window, **btn_params, text=" 2 ", command=lambda: input_key("2")).grid(row=6, column=2)
+Button(window, **btn_params, text=" 3 ", command=lambda: input_key("3")).grid(row=6, column=3)
+Button(window, **spc_params, text=" - ", command=lambda: input_key("-")).grid(row=6, column=4)
+Button(window, **spc_params, text=" tan ", command=lambda: input_key("tan(")).grid(row=7, column=0)
+Button(window, **btn_params, text=" 0 ", command=lambda: input_key("0")).grid(row=7, column=1)
+Button(window, **btn_params, text=" . ", command=lambda: input_key(".")).grid(row=7, column=2)
+Button(window, **equal_params, text=" = ", command=lambda: equal()).grid(row=7, column=3)
+Button(window, **spc_params, text=" √ ", command=lambda: input_key("√(")).grid(row=7, column=4)
 
 calc_input_text = StringVar()
-Label(window, **display_params, textvariable=calc_input_text).grid(row=1, columnspan=4)
+Label(window, **display_params, textvariable=calc_input_text).grid(row=1, columnspan=6)
 result_text = StringVar()
-Label(window, **display_params, textvariable=result_text).grid(row=2, columnspan=4)
+Label(window, **display_params, textvariable=result_text).grid(row=2, columnspan=6)
 window.resizable(False, False)
 window.mainloop()
