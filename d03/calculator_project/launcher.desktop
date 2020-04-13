@@ -2,4 +2,5 @@
 Version=1.0
 Name=Simple Scientific Calculator
 Exec = /home/martin/calculator/d03/calculator_project/calcul.py
+Icon = /home/martin/calculator/d03/calculator_project/icon.png
 Type = Application
